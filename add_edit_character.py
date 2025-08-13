@@ -77,7 +77,7 @@ class AddEditCharacter(ctk.CTkFrame):
 
         # --- Model Type Dropdown ---
         ctk.CTkLabel(self.scroll_frame, text="Model Type:").grid(row=5, column=0, sticky="w", padx=40)
-        self.model_type_option = ctk.CTkOptionMenu(self.scroll_frame, values=["Illustrious", "Pony", "SDXL", "Other"])
+        self.model_type_option = ctk.CTkOptionMenu(self.scroll_frame, values=["Illustrious", "SD 1.5", "SD 2.0", "SD 2.1", "SD 3.0", "SD 3.5 Medium", "SD 3.5 Large", "Pony", "SDXL", "Other"])
         self.model_type_option.set("Illustrious")
         self.model_type_option.grid(row=6, column=0, sticky="we", padx=40, pady=(0, 10))
 
