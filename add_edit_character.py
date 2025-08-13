@@ -3,7 +3,8 @@ import os
 import json
 import re
 from tkinter import filedialog, messagebox
-from PIL import Image
+from PIL import Image, ImageDraw 
+
 
 CATEGORY_FOLDERS = {
     "Characters": "Character JSONs",
@@ -144,6 +145,25 @@ class AddEditCharacter(ctk.CTkFrame):
 
         # initialise folder
         _set_category(self.category_var.get())
+
+        # --- Placeholder for when no image / load fails ---
+        ph_w, ph_h = 300, 200
+        ph = Image.new("RGBA", (ph_w, ph_h), (50, 50, 50, 255))
+        draw = ImageDraw.Draw(ph)
+        txt = "No image selected"
+        try:
+            bbox = draw.textbbox((0, 0), txt)
+            tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+            x = (ph_w - tw) // 2
+            y = (ph_h - th) // 2
+        except Exception:
+            x, y = ph_w // 6, ph_h // 2 - 10
+        draw.text((x, y), txt, fill=(220, 220, 220, 255))
+
+        self.no_image = ctk.CTkImage(light_image=ph, dark_image=ph, size=(ph_w, ph_h))
+        self.preview_image = self.no_image
+        self.image_label.configure(image=self.preview_image, text="")
+        self.image_label.image = self.preview_image  # strong ref on the widget
 
     def _apply_category_theme(self, cat: str):
         colour = COLOUR_MAP.get(cat, "#1a1a1a")
@@ -405,10 +425,8 @@ class AddEditCharacter(ctk.CTkFrame):
         self.extra_image_rows.append((title_entry, path_var, row))
 
     def _clear_preview(self):
-        self.preview_image = None
-        self.image_label.configure(image=None, text="No image selected")
-        try:
-            # also drop the strong ref CTkLabel keeps
-            self.image_label.image = None
-        except Exception:
-            pass
+        # Set placeholder as the current preview
+        self.preview_image = self.no_image
+        self.image_label.configure(image=self.preview_image, text="")
+        self.image_label.image = self.preview_image  # keep strong ref
+        self.image_path = None
