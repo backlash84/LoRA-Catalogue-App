@@ -423,6 +423,7 @@ class AddEditCharacter(ctk.CTkFrame):
                       command=remove_row).pack(side="left")
 
         self.extra_image_rows.append((title_entry, path_var, row))
+        self.after(10, self._scroll_form_to_bottom)
 
     def _clear_preview(self):
         # Set placeholder as the current preview
@@ -430,3 +431,10 @@ class AddEditCharacter(ctk.CTkFrame):
         self.image_label.configure(image=self.preview_image, text="")
         self.image_label.image = self.preview_image  # keep strong ref
         self.image_path = None
+
+    def _scroll_form_to_bottom(self):
+        try:
+            # 1.0 == bottom of the CTkScrollableFrame
+            self.scroll_frame._parent_canvas.yview_moveto(1.0)
+        except Exception:
+            pass

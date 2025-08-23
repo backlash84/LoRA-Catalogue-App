@@ -300,6 +300,7 @@ class CharacterCatalogue(ctk.CTkFrame):
 
         self._render_tags(data.get("tags", []))
         self._render_extra_images(data.get("extra_images", []))
+        self.after(10, self._scroll_details_to_top)
 
     def _set_preview(self, image_path):
         # If no path, show placeholder
@@ -455,3 +456,9 @@ class CharacterCatalogue(ctk.CTkFrame):
             lbl.image = img_to_use  # strong ref
             self._extra_previews.append(img_to_use)
             row += 1
+
+    def _scroll_details_to_top(self):
+        try:
+            self.details._parent_canvas.yview_moveto(0)
+        except Exception:
+            pass

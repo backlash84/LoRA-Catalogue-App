@@ -33,6 +33,11 @@ class App(ctk.CTk):
         frame = self.frames[frame_name]
         frame.tkraise()
 
+        # Auto-refresh catalogue on entry
+        if frame_name == "CharacterCatalogue" and hasattr(frame, "refresh_list"):
+            # If the dropdown handler sets theme/dir, you can also reapply it here if needed
+            frame.refresh_list()
+
 if __name__ == "__main__":
     ctk.set_appearance_mode("Dark")  # or "Light"
     ctk.set_default_color_theme("blue")
